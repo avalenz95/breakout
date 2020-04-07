@@ -29,6 +29,13 @@ let ball = {
   y: 0,
   dx: 0,
   dy: 0,
+  render : function(ctx) {
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ballRadius, 0, PI2);
+    ctx.fillStyle = objectColor;
+    ctx.fill();
+    ctx.closePath();
+  },
 }
 
 resetBallandPaddle();
@@ -85,15 +92,15 @@ function mouseMoveHandler(e) {
 function collisionDetection() {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
-      const b = bricks[c][r];
-      if (b.status === 1) {
-        if (x > b.bx && x < b.bx + brickWidth && y > b.by && y < b.by + brickHeight) {
-          dy = -dy;
-          b.status = 0;
+      const brick = bricks[c][r];
+      if (brick.status === 1) {
+        if (ball.x > brick.bx && x < brick.bx + brickWidth && ball.y > brick.by && ball.y < brick.by + brickHeight) {
+          ball.dy = -ball.dy;
+          brick.status = 0;
           score += 1;
           if (score === brickRowCount * brickColumnCount) {
             alert('YOU WIN, CONGRATS!');
-            document.location.reload();
+            document.location.reload(); 
           }
         }
       }
@@ -107,13 +114,13 @@ document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
 
 function moveBall() {
-  x += dx;
-  y += dy;
+  ball.x += dx;
+  ball.y += dy;
 }
 
 function drawBall() {
   ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, PI2);
+  ctx.arc(ball.x, ball.y, ballRadius, 0, PI2);
   ctx.fillStyle = objectColor;
   ctx.fill();
   ctx.closePath();
@@ -125,7 +132,8 @@ function drawPaddle() {
   ctx.fill();
   ctx.closePath();
 }
-function drawBricks() {
+
+function drawBricks(ctx) {
   for (let c = 0; c < brickColumnCount; c += 1) {
     for (let r = 0; r < brickRowCount; r += 1) {
       const { bx, by, status } = bricks[c][r]; // object deconstruction
@@ -141,7 +149,7 @@ function drawBricks() {
   }
 }
 
-function drawScore() {
+function drawScore(ctx) {
   ctx.font = '16px Arial';
   ctx.fillStyle = objectColor;
   ctx.fillText(`Score: ${score}`, 8, 20);
@@ -165,22 +173,22 @@ function resetBallandPaddle() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
-  drawBall();
-  drawPaddle();
-  drawScore();
+  drawBricks(ctx);
+  ball.render(ctx);
+  drawPaddle(ctx);
+  drawScore(ctx);
   drawLives();
   collisionDetection();
   moveBall();
 
-  if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
-    dx = -dx;
+  if (ball.x + ball.dx > canvas.width - ballRadius || ball.x + ball.dx < ballRadius) {
+    ball.dx = -ball.dx;
   }
-  if (y + dy < ballRadius) {
-    dy = -dy;
-  } else if (y + dy > canvas.height - ballRadius) {
-    if (x > paddleX && x < paddleX + paddleWidth) {
-      dy = -dy;
+  if (ball.y + ball.dy < ballRadius) {
+    ball.dy = -ball.dy;
+  } else if (ball.y + ball.dy > canvas.height - ballRadius) {
+    if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
+      ball.dy = -ball.dy;
     } else {
       lives -= 1;
       if (!lives) {
