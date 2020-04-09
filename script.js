@@ -24,19 +24,34 @@ let y;
 let dx;
 let dy;
 let paddleX;
-let ball = {
-  x : 0,
-  y: 0,
-  dx: 0,
-  dy: 0,
-  render : function(ctx) {
+
+class Ball {
+
+  constructor(x = 0, y = 0, dx = 2, dy = -2, radius, color = '#0095DD') {
+    this.radius = radius;
+    this.color = color;
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+  }
+
+  moveBall() {
+    this.x += dx;
+    this.y += dy;
+  }
+
+  render(ctx) {
     ctx.beginPath();
-    ctx.arc(ball.x, ball.y, ballRadius, 0, PI2);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, ballRadius, 0, PI2);
     ctx.fillStyle = objectColor;
     ctx.fill();
     ctx.closePath();
-  },
+  }
 }
+
+let ball = new Ball(1, 2, 3, 4, 10);
 
 resetBallandPaddle();
 
@@ -174,7 +189,7 @@ function resetBallandPaddle() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawBricks(ctx);
-  ball.render(ctx);
+  Ball.render(ctx);
   drawPaddle(ctx);
   drawScore(ctx);
   drawLives();
