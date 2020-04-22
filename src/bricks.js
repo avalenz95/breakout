@@ -37,3 +37,5 @@ class Bricks {
     }
   }
 }
+
+export default Bricks;

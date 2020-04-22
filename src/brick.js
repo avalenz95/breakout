@@ -17,3 +17,5 @@ class Brick {
     ctx.closePath();
   }
 }
+
+export default Brick;
