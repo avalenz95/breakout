@@ -1,6 +1,5 @@
 /* eslint-disable max-classes-per-file */
 import Ball from './ball';
-import Brick from './brick';
 import Bricks from './bricks';
 import Paddle from './paddle';
 import Score from './score';
@@ -11,19 +10,14 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 
 // CONSTANTS - Do not change over the course of the program
-const ballRadius = 10;
 const paddleHeight = 10;
 const paddleWidth = 75;
 const brickRowCount = 3;
 const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
-const brickPadding = 10;
-const brickOffsetTop = 30;
-const brickOffsetLeft = 30;
 const paddleXStart = (canvas.width - paddleWidth) / 2;
 const paddleYStart = (canvas.height - 12);
-const PI2 = Math.PI * 2;
 const objectColor = '#0095DD';
 
 const canvasWidth = canvas.width;
@@ -33,13 +27,10 @@ const canvasHeight = canvas.height;
 const livesPosition = canvasWidth / 2;
 
 const ball = new Ball();
-const paddle = new Paddle(paddleXStart, paddleYStart, paddleWidth, paddleHeight, black, objectColor);
-
-resetBallandPaddle();
+const paddle = new Paddle(paddleXStart, paddleYStart, paddleWidth, paddleHeight, 'black', objectColor);
 
 const score = new Score();
-const lives = new Lives(0, livesPosition, 4, objectColor
-  )
+const lives = new Lives(0, livesPosition, 4, objectColor);
 let rightPressed = false;
 let leftPressed = false;
 
@@ -50,13 +41,14 @@ function collisionDetection() {
     for (let r = 0; r < bricks.rows; r += 1) {
       const brick = bricks[c][r];
       if (brick.status === 1) {
+        // eslint-disable-next-line max-len
         if (ball.x > brick.bx && x < brick.bx + brickWidth && ball.y > brick.by && ball.y < brick.by + brickHeight) {
           ball.dy = -ball.dy;
           brick.status = 0;
           score.increase();
           if (score === brick.rows * bricks.cols) {
             alert('YOU WIN, CONGRATS!');
-            document.location.reload(); 
+            document.location.reload();
           }
         }
       }
@@ -80,26 +72,47 @@ function resetBallAndPaddle() {
   paddle.x = paddleXStart;
 }
 
-// Brick Setup
-function intializeBricks() {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    bricks[c] = [];
-    for (let r = 0; r < brickRowCount; r += 1) {
-      const brickX = (r * (brickWidth + brickPadding)) + brickOffsetLeft;
-      const brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
-      bricks[c][r] = new Brick(brickX, brickY);
+function collisionsWithCanvasAndPaddle() {
+  if (ball.x + ball.dx > canvasWidth - ball.radius || ball.x + ball.dx < ball.radius) {
+    ball.dx = -ball.dx;
+  }
+
+  if (ball.y + ball.dy < ball.radius) {
+    ball.dy = -ball.dy;
+  } else if (ball.y + ball.dy > canvasHeight - ball.radius) {
+    if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
+      ball.dy = -ball.dy;
+    } else {
+      // Lose a life
+      lives.decrease();
+      if (!lives) {
+        ball.x = 200;
+        ball.y = 200;
+      } else {
+        resetBallAndPaddle();
+      }
     }
   }
 }
 
+// Game Loop
+function draw() {
+  // Clear the canvas
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  // Call helper functions
+  ball.render(ctx);
+  paddle.render(ctx);
+  score.render(ctx);
+  lives.render(ctx);
+  bricks.render(ctx);
+  collisionDetection();
+  ball.move(ctx);
+  movePaddle();
+  collisionsWithCanvasAndPaddle();
 
-
-
-intializeBricks();
-// Functions - reusable code
-
-
-// Key handlers
+  // Draw the screen again
+  requestAnimationFrame(draw);
+}
 
 function keyDownHandler(e) {
   if (e.key === 'Right' || e.key === 'ArrowRight') {
@@ -120,104 +133,12 @@ function keyUpHandler(e) {
 function mouseMoveHandler(e) {
   const relativeX = e.clientX - canvas.offsetLeft;
   if (relativeX > 0 && relativeX < canvas.width) {
-    paddleX = relativeX - paddleWidth / 2;
+    paddle.x = relativeX - paddleWidth / 2;
   }
 }
 
-// Register Events
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
 document.addEventListener('mousemove', mouseMoveHandler, false);
-
-function moveBall() {
-  ball.x += dx;
-  ball.y += dy;
-}
-
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(ball.x, ball.y, ballRadius, 0, PI2);
-  ctx.fillStyle = objectColor;
-  ctx.fill();
-  ctx.closePath();
-}
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = objectColor;
-  ctx.fill();
-  ctx.closePath();
-}
-
-function drawBricks(ctx) {
-  for (let c = 0; c < brickColumnCount; c += 1) {
-    for (let r = 0; r < brickRowCount; r += 1) {
-      if (status === 1) {
-        bricks[c][r].render(ctx)
-      }
-    }
-  }
-}
-
-function drawScore(ctx) {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = objectColor;
-  ctx.fillText(`Score: ${score}`, 8, 20);
-}
-
-function drawLives() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = objectColor;
-  ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 20);
-}
-
-function resetBallandPaddle() {
-  ball.x = canvas.width / 2;
-  ball.y = canvas.height - 30;
-  ball.dx = 3;
-  ball.dy = -3;
-  paddleX = paddleXStart;
-}
-
-// Game loop - calls all render functions
-
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks(ctx);
-  ball.render(ctx);
-  drawPaddle(ctx);
-  drawScore(ctx);
-  drawLives();
-  collisionDetection();
-  moveBall();
-
-  if (ball.x + ball.dx > canvas.width - ballRadius || ball.x + ball.dx < ballRadius) {
-    ball.dx = -ball.dx;
-  }
-  if (ball.y + ball.dy < ballRadius) {
-    ball.dy = -ball.dy;
-  } else if (ball.y + ball.dy > canvas.height - ballRadius) {
-    if (ball.x > paddleX && ball.x < paddleX + paddleWidth) {
-      ball.dy = -ball.dy;
-    } else {
-      lives -= 1;
-      if (!lives) {
-        alert('GAME OVER');
-        document.location.reload();
-      } else {
-        resetBallandPaddle();
-      }
-    }
-  }
-
-  if (rightPressed && paddleX < canvas.width - paddleWidth) {
-    paddleX += 7;
-  } else if (leftPressed && paddleX > 0) {
-    paddleX -= 7;
-  }
-
-  // Draws screen
-  requestAnimationFrame(draw);
-}
 
 draw();

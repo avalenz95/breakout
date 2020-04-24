@@ -1,5 +1,3 @@
-import Bricks from './bricks';
-
 class Ball {
   // Creates instance of ball
   constructor(x, y, dx = 2, dy = -1, radius = 10, stroke = '#d400ff', color = '#ffffff') {
@@ -31,4 +29,4 @@ class Ball {
   }
 }
 
-export default Bricks;
+export default Ball;
