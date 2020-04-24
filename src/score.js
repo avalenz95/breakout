@@ -8,7 +8,7 @@ class Score {
   }
 
   increase() {
-    this.score += 1
+    this.score += 1;
   }
 
   render(ctx) {

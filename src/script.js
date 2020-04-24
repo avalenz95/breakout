@@ -1,4 +1,10 @@
 /* eslint-disable max-classes-per-file */
+import Ball from './ball';
+import Brick from './brick';
+import Bricks from './bricks';
+import Paddle from './paddle';
+import Score from './score';
+import Lives from './lives';
 
 // DOM REFERENCES
 const canvas = document.getElementById('myCanvas');
@@ -18,44 +24,14 @@ const brickOffsetLeft = 30;
 const paddleXStart = (canvas.width - paddleWidth) / 2;
 const PI2 = Math.PI * 2;
 const objectColor = '#0095DD';
-let paddleX;
+
+const canvasWidth = canvas.width;
+const canvasHeight = canvas.height;
 
 
-//Brick class
-//Bricks - intialize brick , draw bricks
-// lives - draw lives
-// score - draww score
-// paddle - draw paddle
-// game - owns draw creates instances of classes has game loop
+const livesPos = canvasWidth / 2;
 
-//ball class
-class Ball() {
-
-  constructor(x = 0, y = 0, dx = 2, dy = -2, radius, color = '#0095DD') {
-    this.radius = radius;
-    this.color = color;
-    this.x = x;
-    this.y = y;
-    this.dx = dx;
-    this.dy = dy;
-  }
-
-  moveBall() {
-    this.x += this.dx;
-    this.y += this.dy;
-  }
-
-  render(ctx) {
-    ctx.beginPath();
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, PI2);
-    ctx.fillStyle = this.color;
-    ctx.fill();
-    ctx.closePath();
-  }
-}
-
-let ball = new Ball(1, 2, 3, 4, 10);
+const ball = new Ball();
 
 resetBallandPaddle();
 
