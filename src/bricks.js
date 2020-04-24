@@ -1,4 +1,4 @@
-import Brick from './brick.js';
+import Brick from './brick';
 
 const brickWidth = 75;
 const brickHeight = 20;

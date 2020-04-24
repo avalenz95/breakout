@@ -1,4 +1,4 @@
-import Bricks from "./bricks";
+import Bricks from './bricks';
 
 class Ball {
   // Creates instance of ball
