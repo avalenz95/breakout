@@ -106,7 +106,7 @@ eval("__webpack_require__.r(__webpack_exports__);\nclass Ball {\n  // Creates in
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\nclass Brick {\n  // Init brick object\n  constructor(x, y, width = 75, height = 20, color) {\n    this.x = x;\n    this.y = y;\n    this.width = width;\n    this.height = height;\n    this.color = color;\n  }\n\n  // Render brick\n  render(ctx) {\n    ctx.beginPath();\n    ctx.rect(this.x, this.y, this.width, this.height);\n    ctx.fillStyle = this.color;\n    ctx.fill();\n    ctx.closePath();\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Brick);\n\n\n//# sourceURL=webpack:///./src/brick.js?");
+eval("__webpack_require__.r(__webpack_exports__);\nclass Brick {\n  // Init brick object\n  constructor(x, y, width = 75, height = 20, color) {\n    this.x = x;\n    this.y = y;\n    this.width = width;\n    this.height = height;\n    this.color = color;\n    this.status = 1;\n  }\n\n  // Render brick\n  render(ctx) {\n    ctx.beginPath();\n    ctx.rect(this.x, this.y, this.width, this.height);\n    ctx.fillStyle = this.color;\n    ctx.fill();\n    ctx.closePath();\n  }\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Brick);\n\n\n//# sourceURL=webpack:///./src/brick.js?");
 
 /***/ }),
 

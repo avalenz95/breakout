@@ -6,6 +6,7 @@ class Brick {
     this.width = width;
     this.height = height;
     this.color = color;
+    this.status = 1;
   }
 
   // Render brick
