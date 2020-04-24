@@ -27,7 +27,7 @@ const canvasHeight = canvas.height;
 const livesPosition = canvasWidth / 2;
 
 const ball = new Ball();
-const paddle = new Paddle(paddleXStart, paddleYStart, paddleWidth, paddleHeight, 'black', objectColor);
+const paddle = new Paddle(paddleXStart, paddleYStart, paddleWidth, paddleHeight, objectColor);
 
 const score = new Score();
 const lives = new Lives(0, livesPosition, 4, objectColor);
