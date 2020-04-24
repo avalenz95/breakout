@@ -14,6 +14,8 @@ const ctx = canvas.getContext('2d');
 const ballRadius = 10;
 const paddleHeight = 10;
 const paddleWidth = 75;
+const brickRowCount = 3;
+const brickColumnCount = 5;
 const brickWidth = 75;
 const brickHeight = 20;
 const brickPadding = 10;
@@ -60,6 +62,22 @@ function collisionDetection() {
       }
     }
   }
+}
+
+function movePaddle() {
+  if (rightPressed && paddle.x < paddle.width) {
+    paddle.x += 5;
+  } else if (leftPressed && paddle.x > 0) {
+    paddle.x -= 5;
+  }
+}
+
+function resetBallAndPaddle() {
+  ball.x = canvasWidth / 2;
+  ball.y = canvasHeight / 3;
+  ball.dx = 2;
+  ball.dy = -2;
+  paddle.x = paddleXStart;
 }
 
 // Brick Setup
