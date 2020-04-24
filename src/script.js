@@ -42,7 +42,7 @@ function collisionDetection() {
       const brick = bricks[c][r];
       if (brick.status === 1) {
         // eslint-disable-next-line max-len
-        if (ball.x > brick.bx && x < brick.bx + brickWidth && ball.y > brick.by && ball.y < brick.by + brickHeight) {
+        if (ball.x > brick.bx && ball.x < brick.bx + brickWidth && ball.y > brick.by && ball.y < brick.by + brickHeight) {
           ball.dy = -ball.dy;
           brick.status = 0;
           score.increase();
